@@ -7,7 +7,7 @@
 
 #-Disponibilita': lo script controlla se il prodotto e' presente, se si e se ci sono almeno 3 pezzi rimasti viene salvato il suo link con relativo numero di disponibilita' sulla seconda colonna nel file .csv.
 #-Prezzo: tramite alcuni calcoli lo script analizza il prezzo dell'oggetto su Amazon e lo compara con i prezzi degli stessi oggetti su Ebay (se sono presenti) pubblicati dai competitors e decide se ci puo' essere un
-# eventuale guadagno; in base a quello viene salvato o meno il link.
+# Eventuale guadagno; fattore che determina se il link venga salvato o meno.
 #-Spese di spedizione: nel calcolo del prezzo vengono tenute di conto anche le spese di spedizione utilizzate dai competitors su Ebay per ogni oggetto.
 #-Su Ebay viene controllato che non ci siano piu' di 8 inserzioni per lo stesso oggetto gia' pubblicate dai competitors.
 
@@ -53,34 +53,34 @@ counter = 3840                                          #Questo counter puo' ess
 #Counter for changing page
 counter2 = 0
 
-#Page counter											 #IMPORTANTE - per batch da 25 pagine l'uno ricordarsi che il secondo batch parte non dalla 25esima pagina ma dalla 26esima: infatti l'oggetto numero "600" e' il primo della
-                                                         #26esima. E dopo andremmo alla 51esima (partendo con counter = 1200) e non alla 50esima.
+#Page counter						#IMPORTANTE - per batch da 25 pagine l'uno ricordarsi che il secondo batch parte non dalla 25esima pagina ma dalla 26esima: infatti l'oggetto numero "600" e' il primo della
+                                                        #26esima. E dopo andremmo alla 51esima (partendo con counter = 1200) e non alla 50esima.
 
 
-page_counter = 161                                       #IMPORTANTE:se si parte dalla prima pagina NON mettere "1" ma bensi' "0" , per il resto leggere commento sopra a "counter".
+page_counter = 161                                      #IMPORTANTE:se si parte dalla prima pagina NON mettere "1" ma bensi' "0" , per il resto leggere commento sopra a "counter".
 
 
 #Lo script parte da 0 (primo oggetto su Amazon in alto a sinistra) fino al 23 (ultimo in basso a destra della prima pagina) e cambia pagina per continuare l'analisi degli altri oggetti (24,25,26,etc) fino all'ultimo oggetto
 #della seconda pagina (numero 47) e passa alla pagina successiva - aggiungendo il numero dell'ultimo oggetto nella pagina al codice e' possibile creare degli "spartiacque"
 #per far cambiare pagina allo script e far continuare l'analisi degli oggetti in modo sequenziale.
 
-counter_key_value = 0                                               #Counter per modificare il nome della chiave per aggiungere il valore prezzo al 20% ad ogni rispettivo oggetto al file finale (se non cambiassi nome sovrascriverebbe ogni volta il solito valore).
+counter_key_value = 0                                   #Counter per modificare il nome della chiave per aggiungere il valore prezzo al 20% ad ogni rispettivo oggetto al file finale (se non cambiassi nome sovrascriverebbe ogni volta il solito valore).
 
 
-while counter < 4441:                                               #numero di oggetti per x pagine
+while counter < 4441:                                   #numero di oggetti per x pagine
 
     try:    
     
         if page_counter > 0:
 
-            if page_counter == 1:                                       #Dato che il primo url (quello in cima allo script) e l'url che si creerebbe utilizzando il "page_counter = 1" (ovvero dopo il primo giro di while)
-                                                                        #porterebbero alla stessa pagina (analizzeremmo due volte la prima pagina), dobbiamo usare uno stratagemma per saltare il valore 1 del page_counter
-                page_counter = 2                                        #e passare direttamente al valore 2 - infatti vediamo che quando page_counter e' = 1 lo trasformiamo in = a 2 e risolviamo.
+            if page_counter == 1:                       #Dato che il primo url (quello in cima allo script) e l'url che si creerebbe utilizzando il "page_counter = 1" (ovvero dopo il primo giro di while)
+                                                        #porterebbero alla stessa pagina (analizzeremmo due volte la prima pagina), dobbiamo usare uno stratagemma per saltare il valore 1 del page_counter
+                page_counter = 2                        #e passare direttamente al valore 2 - infatti vediamo che quando page_counter e' = 1 lo trasformiamo in = a 2 e risolviamo.
 
-				#Questo next_page_url sotto va modificato con il link modificato che Amazon da quando si va in qualsiasi pagina della ricerca che non sia la prima (dalla 2 in poi).									
-				#Anche nel next_page_url sotto (dove c'e' la nota) va posizionata la stessa struttura link delle pagine successive alla prima di Amazon, tenendo conto pero' che quello verra' sempre utilizzato per primo
-				#tutte le volte che si modificheranno a mano i counter per andare avanti in profondita' nelle ricerche a scaglioni di pagine su Amazon (es. dopo le prime X pagine che partono dalla prima, dobbiamo modificare
-				#i counter per analizzare altre tot pagine, e lo script andra' direttamente ad analizzare questa struttura link.
+							#Questo next_page_url sotto va modificato con il link modificato che Amazon da quando si va in qualsiasi pagina della ricerca che non sia la prima (dalla 2 in poi).									
+							#Anche nel next_page_url sotto (dove c'e' la nota) va posizionata la stessa struttura link delle pagine successive alla prima di Amazon, tenendo conto pero' che quello verra' sempre utilizzato per primo
+							#tutte le volte che si modificheranno a mano i counter per andare avanti in profondita' nelle ricerche a scaglioni di pagine su Amazon (es. dopo le prime X pagine che partono dalla prima, dobbiamo modificare
+							#i counter per analizzare altre tot pagine, e lo script andra' direttamente ad analizzare questa struttura link.
 				
                 next_page_url = 'http://www.amazon.it/s/ref=sr_pg_' + str(page_counter) + '?rh=n%3A635016031%2Cp_76%3A490210031%2Cp_6%3AA11IL2PNWYJU7H&page=' + str(page_counter) + '&bbn=635016031&ie=UTF8&qid=1467368199'
 
@@ -116,13 +116,13 @@ while counter < 4441:                                               #numero di o
         html = requests.get(url)
         soup = BeautifulSoup(html.content, "html.parser")
 
-        #result_var = '\'result_' + str(counter) + '\''						#"result_var" sta ad identificare l'oggetto da analizzare nella pagina dei risultati di Amazon come ad es. "result_234" e' il 234esimo oggetto in ricerca.
+        #result_var = '\'result_' + str(counter) + '\''							#"result_var" sta ad identificare l'oggetto da analizzare nella pagina dei risultati di Amazon come ad es. "result_234" e' il 234esimo oggetto in ricerca.
         result_var = 'result_' + str(counter)								#FONDAMENTALE: il "result_x" viene riconosciuto solo se NON aggiungiamo gli apici "'\''" (come es. sopra) nella definizione della variabile
         print result_var
         
         tag = 'li'
         first_attr = 'id'
-        second_attr = result_var											#Il "first_result" sara' l'attributo-valore da cercare con il soup che cambia ogni volta a seconda del numero dell'oggetto e che viene utilizzato per
+        second_attr = result_var									#Il "first_result" sara' l'attributo-valore da cercare con il soup che cambia ogni volta a seconda del numero dell'oggetto e che viene utilizzato per
         tag_attrs = {first_attr: second_attr}								#analizzare il link e il prezzo del prodotto nella pagina ricerca.
         first_result = soup.find(tag, **tag_attrs)							#il "**tag_attrs" si basa su un comando di solito utilizzato nelle funzioni, ovvero "**kwargs", che serve ad estrarre tutti gli oggetti definiti come argomenti della funzione non presenti nella definizione del metodo della funzione
 																			#in questo caso, "**tag_attrs" utilizza gli oggetti forniti, sotto forma di attriburo-valore, nella variabile "tag_attrs"
