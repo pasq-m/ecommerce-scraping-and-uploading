@@ -2,8 +2,6 @@
 #Script che analizza i files .csv creati dalla "parte 2" contenenti i dati da inserire nei form di pubblicazione inserzione su ebay.
 #Utilizza come modulo Selenium
 
-#IMPORTANTE: a bozza nuova (1 volta al mese) ebay cambia il codice numerico e quindi tocca aggiornarlo a mano.
-
 from path import path
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
